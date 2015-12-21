@@ -1,12 +1,17 @@
-﻿using System;
+﻿using AmazingGeoRace.Domain;
+using AmazingGeoRace.ViewModels;
+using AmazingRaceService.Interface;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,6 +32,11 @@ namespace AmazingGeoRace
     {
         private TransitionCollection transitions;
 
+        internal RaceDetailsViewModel RaceDetailsViewModel { get; private set; }
+
+        public new static App Current { get { return (App)Application.Current; } }
+
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -34,6 +44,7 @@ namespace AmazingGeoRace
         public App()
         {
             this.InitializeComponent();
+            IntergrateViewModels();
             this.Suspending += this.OnSuspending;
         }
 
@@ -129,6 +140,70 @@ namespace AmazingGeoRace
 
             // TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private void IntergrateViewModels()
+        {
+            RaceDetailsViewModel = new RaceDetailsViewModel();
+            RaceDetailsViewModel.ShowSuccessMessage += async succeededRoute =>
+            {
+                var dialog = new MessageDialog($"You finished {succeededRoute.Name} successfully! Congratulations.");
+                await dialog.ShowAsync();
+            };
+            RaceDetailsViewModel.ShowUnlockCheckpointDialog += async checkPoint =>
+            {
+                var dialog = new SolutionDialog();
+                await dialog.ShowAsync();
+                await Dialog_TrySolution(dialog.Solution);
+            };
+            RaceDetailsViewModel.ResetRoute += async route => {
+                var serviceProxy = new ServiceProxy();
+                var result = await serviceProxy.ResetRoute(new RouteRequest {
+                    UserName = "s1310307019",
+                    Password = "s1310307019",
+                    RouteId = route.Id
+                });
+                if (result) {
+                    var routes = await serviceProxy.GetRoutes("s1310307019", "s1310307019");
+                    RaceDetailsViewModel.Route = routes.FirstOrDefault(x => x.Id == route.Id);
+                }
+                else {
+                    var dialog = new MessageDialog($"An error occurred when trying to reset route {route.Name}.");
+                    await dialog.ShowAsync();
+                }
+
+            };
+        }
+
+        private async Task Dialog_TrySolution(string solution)
+        {
+            await CheckSolutionForCheckPoint(solution, RaceDetailsViewModel.NextCheckPoint, async () =>
+            {
+                var serviceProxy = new ServiceProxy();
+                var routes = await serviceProxy.GetRoutes("s1310307019", "s1310307019");
+                RaceDetailsViewModel.Route = routes.FirstOrDefault(x => x.Id == RaceDetailsViewModel.Route.Id);
+            }, async () =>
+            {
+                var dialog = new MessageDialog($"{solution} wasn´t the correct solution. Please try anotherone.");
+                await dialog.ShowAsync();
+            });
+
+        }
+
+        private async Task CheckSolutionForCheckPoint(string solution, Checkpoint checkPoint, Action onCorrect, Action onIncorrect)
+        {
+            var serviceProxy = new ServiceProxy();
+            var result = await serviceProxy.InformAboutVisitedCheckpoint(new CheckpointRequest
+            {
+                CheckpointId = checkPoint.Id,
+                UserName = "s1310307019",
+                Password = "s1310307019",
+                Secret = solution
+            });
+            if (result)
+                onCorrect();
+            else
+                onIncorrect();
         }
     }
 }

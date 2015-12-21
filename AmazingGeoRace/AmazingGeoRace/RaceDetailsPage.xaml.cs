@@ -15,6 +15,11 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using AmazingGeoRace.ViewModels;
 using AmazingRaceService.Interface;
+using Windows.Phone.UI.Input;
+using Windows.UI.Xaml.Controls.Maps;
+using AmazingGeoRace.Domain;
+using Windows.UI.Popups;
+using System.Threading.Tasks;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -22,27 +27,42 @@ namespace AmazingGeoRace
 {
     public sealed partial class RaceDetailsPage : Page
     {
+
         public RaceDetailsPage()
         {
             this.InitializeComponent();
+            HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e) {
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            if (!Frame.CanGoBack)
+                return;
+            e.Handled = true;
+            Frame.GoBack();
+        }
+
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e) {
             var route = e.Parameter as Route;
             if (route == null) {
                 Frame.Navigate(e.SourcePageType);
                 return;
             }
-                
-            var viewModel = new RaceDetailsViewModel(route);
-            DataContext = viewModel;
-            // TODO: Prepare page for display here.
 
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
+            var viewModel = App.Current.RaceDetailsViewModel;
+            viewModel.Route = route;
+            var elements = viewModel.GetMapElementsForCurrentRoute();
+            foreach (var element in elements) {
+                Map.MapElements.Add(element);
+            }
+            Map.Center = route.NextCheckpoint?.Location ?? route.VisitedCheckpoints.Last()?.Location;
+            DataContext = viewModel;
         }
     }
 }

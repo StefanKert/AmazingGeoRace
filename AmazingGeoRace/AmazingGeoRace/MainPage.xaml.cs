@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using AmazingGeoRace.Data;
 using AmazingGeoRace.ViewModels;
+using AmazingGeoRace.Common;
+using AmazingGeoRace.Domain;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -31,8 +33,6 @@ namespace AmazingGeoRace
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-
-
         }
 
         /// <summary>
@@ -54,16 +54,21 @@ namespace AmazingGeoRace
             // this event is handled for you.
         }
 
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Frame.Navigate(typeof(RaceDetailsViewModel), e.ClickedItem);
-        }
-
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (RoutesList.SelectedItem != null) {
                 Frame.Navigate(typeof(RaceDetailsPage), RoutesList.SelectedItem);
             }
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var serviceProxy = new ServiceProxy();
+            await serviceProxy.ResetAllRoutes(new Request
+            {
+                Password = "s1310307019",
+                UserName = "s1310307019"
+            });
         }
     }
 }

@@ -4,12 +4,15 @@
     xmlns:local="using:AmazingGeoRace"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:map="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:converters="using:AmazingGeoRace.Converters"
     x:Class="AmazingGeoRace.RaceDetailsPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Page.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:BooleanToCollapsedConverter x:Key="BoolToHidden"/>
+    </Page.Resources>
     <Grid x:Name="LayoutRoot">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -30,16 +33,32 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="Name" FontSize="20" Margin="5"/>
-                <TextBlock Grid.Row="1" Text="{Binding NextCheckPoint.Name, FallbackValue=Name}" TextWrapping="Wrap"/>
-                <TextBlock Grid.Row="2"  Text="Hint" FontSize="20"/>
-                <TextBlock Grid.Row="3" Text="{Binding NextCheckPoint.Hint, FallbackValue=Hint}" TextWrapping="Wrap"/>
-                <Maps:MapControl Grid.Row="4" Center="{Binding NextCheckPointLocation}"/>
+                <Grid Grid.Row="0"  Margin ="10" Visibility="{Binding Finished, Converter={StaticResource BoolToHidden}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Name" FontSize="20" Margin="5" Style="{ThemeResource TitleTextBlockStyle}"/>
+                    <TextBlock Grid.Row="1" Text="{Binding NextCheckPoint.Name, FallbackValue=Name}" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="2"  Text="Hint" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
+                    <TextBlock Grid.Row="3" Text="{Binding NextCheckPoint.Hint, FallbackValue=Hint}" TextWrapping="Wrap"/>
+                    <Button Grid.Row="4" Content="Provide Solution" Command="{Binding ShowUnlockCheckpointDialogCommand}" />
+                </Grid>
+                <Grid Grid.Row="0"  Margin ="10" Visibility="{Binding Finished, Converter={StaticResource BoolToVis}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Content="Reset Route" Command="{Binding ResetRouteCommand}" HorizontalAlignment="Stretch"/>
+                </Grid>
+                <Maps:MapControl  x:Name="Map" Grid.Row="1" ZoomLevel="18" Style="AerialWithRoads">
+                </Maps:MapControl>
             </Grid>
         </Grid>
     </Grid>

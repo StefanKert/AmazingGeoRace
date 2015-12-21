@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Title Panel -->
@@ -28,7 +29,7 @@
         </StackPanel>
 
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin ="10">
-            <ListView ItemsSource="{Binding Routes}" x:Name="RoutesList" ItemClick="ListView_ItemClick" SelectionChanged="ListView_SelectionChanged">
+            <ListView ItemsSource="{Binding Routes}" x:Name="RoutesList" SelectionChanged="ListView_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -38,5 +39,6 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
+        <Button Grid.Row="2" Content="Reset All Routes" Margin ="10" Click="Button_Click" HorizontalAlignment="Stretch"/>
     </Grid>
 </Page>
