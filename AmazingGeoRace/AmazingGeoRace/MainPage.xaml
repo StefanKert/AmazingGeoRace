@@ -39,6 +39,6 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
-        <Button Grid.Row="2" Content="Reset All Routes" Margin ="10" Click="Button_Click" HorizontalAlignment="Stretch"/>
+        <Button Grid.Row="2" Content="Reset All Routes" Margin ="10" Command="{Binding ResetAllRoutesCommand}" HorizontalAlignment="Stretch"/>
     </Grid>
 </Page>

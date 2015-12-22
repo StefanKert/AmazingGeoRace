@@ -33,29 +33,15 @@ namespace AmazingGeoRace.ViewModels
         }
 
         private async Task OnLoginCommand(object obj) {
-#if DEBUG
-            LoginSucceeded();
-            return;
-#endif
-            var password = obj as string;
-            if (string.IsNullOrEmpty(password))
-            {
-                var dialog = new MessageDialog("No password given for user.", "Error");
-                await dialog.ShowAsync();
-                return;
-            }
-            else {
-                var serviceProxy = new ServiceProxy();
-                if (await serviceProxy.CheckCredentials(Username, password))
-                    LoginSucceeded();
-                else {
-                    var dialog = new MessageDialog("Login failed. Please check your credentials.", "Error");
-                    await dialog.ShowAsync();
+            await ExceptionHandling.HandleException(() => {
+                var password = obj as string;
+                if (string.IsNullOrEmpty(password)) {
+                    throw new Exception("No password given for user.");
                 }
-            }
-
+                PerformLogin(Username, password);
+            });
         }
 
-        public event Action LoginSucceeded;
+        public event Action<string, string> PerformLogin;
     }
 }

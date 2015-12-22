@@ -31,9 +31,7 @@ namespace AmazingGeoRace
 
         public LoginPage() {
             this.InitializeComponent();
-            var viewModel = new LoginViewModel();
-            viewModel.LoginSucceeded += () => { Frame.Navigate(typeof(MainPage)); };
-            this.DataContext = viewModel;
+            this.DataContext = App.Current.LoginViewModel;
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += this.NavigationHelper_LoadState;
             this.navigationHelper.SaveState += this.NavigationHelper_SaveState;

@@ -40,35 +40,15 @@ namespace AmazingGeoRace
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            var mainViewModel = new MainViewModel();
-            await mainViewModel.LoadRoutes();
-            DataContext = mainViewModel;
-            // TODO: Prepare page for display here.
-
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
+        protected override async void OnNavigatedTo(NavigationEventArgs e) {
+            var viewModel = App.Current.MainViewModel;
+            DataContext = viewModel;
+            viewModel.Initialize();
         }
 
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (RoutesList.SelectedItem != null) {
-                Frame.Navigate(typeof(RaceDetailsPage), RoutesList.SelectedItem);
-            }
-        }
-
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var serviceProxy = new ServiceProxy();
-            await serviceProxy.ResetAllRoutes(new Request
-            {
-                Password = "s1310307019",
-                UserName = "s1310307019"
-            });
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (RoutesList.SelectedItem != null)
+                App.Current.MainViewModel.ShowRouteDetailsCommand.Execute(RoutesList.SelectedItem);
         }
     }
 }

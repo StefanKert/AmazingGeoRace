@@ -35,14 +35,13 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0"  Margin ="10" Visibility="{Binding Finished, Converter={StaticResource BoolToHidden}}">
+                <Grid Grid.Row="0"  Margin ="10" Visibility="{Binding Finished, Converter={StaticResource BoolToHidden}, FallbackValue=Visible}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="Name" FontSize="20" Margin="5" Style="{ThemeResource TitleTextBlockStyle}"/>
                     <TextBlock Grid.Row="1" Text="{Binding NextCheckPoint.Name, FallbackValue=Name}" TextWrapping="Wrap"/>
@@ -50,15 +49,13 @@
                     <TextBlock Grid.Row="3" Text="{Binding NextCheckPoint.Hint, FallbackValue=Hint}" TextWrapping="Wrap"/>
                     <Button Grid.Row="4" Content="Provide Solution" Command="{Binding ShowUnlockCheckpointDialogCommand}" />
                 </Grid>
-                <Grid Grid.Row="0"  Margin ="10" Visibility="{Binding Finished, Converter={StaticResource BoolToVis}}">
+                <Grid Grid.Row="0"  Margin ="10" Visibility="{Binding Finished, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" Content="Reset Route" Command="{Binding ResetRouteCommand}" HorizontalAlignment="Stretch"/>
                 </Grid>
-                <Maps:MapControl  x:Name="Map" Grid.Row="1" ZoomLevel="18" Style="AerialWithRoads">
-                </Maps:MapControl>
+                <Maps:MapControl  x:Name="Map" Grid.Row="1" ZoomLevel="18" Style="AerialWithRoads"/>
             </Grid>
         </Grid>
     </Grid>

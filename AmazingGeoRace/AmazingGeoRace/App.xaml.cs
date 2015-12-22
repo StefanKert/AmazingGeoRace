@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using AmazingGeoRace.Common;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -33,6 +34,9 @@ namespace AmazingGeoRace
         private TransitionCollection transitions;
 
         internal RaceDetailsViewModel RaceDetailsViewModel { get; private set; }
+        internal LoginViewModel LoginViewModel { get; private set; }
+        internal MainViewModel MainViewModel { get; private set; }
+
 
         public new static App Current { get { return (App)Application.Current; } }
 
@@ -144,6 +148,36 @@ namespace AmazingGeoRace
 
         private void IntergrateViewModels()
         {
+            var loginService = new LoginService();
+            var serviceProxy = new ServiceProxy();
+            LoginViewModel = new LoginViewModel();
+            LoginViewModel.PerformLogin += async (username, password) => {
+                await ExceptionHandling.HandleExceptionForAsyncMethod(async () => {
+                    await loginService.Login(username, password);
+                    ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
+                });
+            };
+
+            MainViewModel = new MainViewModel();
+            MainViewModel.ReloadRoutes += async () => {
+                await ExceptionHandling.HandleExceptionForAsyncMethod(async () =>  MainViewModel.SetRoutes(await serviceProxy.GetRoutes(loginService.Credentials.Username, loginService.Credentials.Password)));
+            };
+            
+            MainViewModel.ResetAllRoutes += async () => {
+                await ExceptionHandling.HandleExceptionForAsyncMethod(async () => {
+                    await serviceProxy.ResetAllRoutes(new Request {
+                        Password = loginService.Credentials.Password,
+                        UserName = loginService.Credentials.Username
+                    });
+                    var dialog = new MessageDialog("Routes successfully resetted.");
+                    await dialog.ShowAsync();
+                });
+            };
+            MainViewModel.ShowRouteDetails += (route) => {
+                ((Frame)Window.Current.Content).Navigate(typeof(RaceDetailsPage), route);
+            };
+            
+
             RaceDetailsViewModel = new RaceDetailsViewModel();
             RaceDetailsViewModel.ShowSuccessMessage += async succeededRoute =>
             {
@@ -157,7 +191,6 @@ namespace AmazingGeoRace
                 await Dialog_TrySolution(dialog.Solution);
             };
             RaceDetailsViewModel.ResetRoute += async route => {
-                var serviceProxy = new ServiceProxy();
                 var result = await serviceProxy.ResetRoute(new RouteRequest {
                     UserName = "s1310307019",
                     Password = "s1310307019",
