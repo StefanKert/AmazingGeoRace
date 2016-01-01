@@ -1,29 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage.Pickers.Provider;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using AmazingGeoRace.ViewModels;
-using AmazingRaceService.Interface;
+﻿using System.Linq;
 using Windows.Phone.UI.Input;
-using Windows.UI.Xaml.Controls.Maps;
-using AmazingGeoRace.Domain;
-using Windows.UI.Popups;
-using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+using AmazingGeoRace.Models;
 
-// The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
-
-namespace AmazingGeoRace
+namespace AmazingGeoRace.Views
 {
     public sealed partial class RaceDetailsPage : Page
     {
@@ -56,7 +37,7 @@ namespace AmazingGeoRace
             }
 
             var viewModel = App.Current.RaceDetailsViewModel;
-            viewModel.Route = route;
+            viewModel.SetRoute(route);
             var elements = viewModel.GetMapElementsForCurrentRoute();
             foreach (var element in elements) {
                 Map.MapElements.Add(element);

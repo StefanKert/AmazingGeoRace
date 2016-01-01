@@ -1,5 +1,5 @@
 ﻿<ContentDialog
-    x:Class="AmazingGeoRace.SolutionDialog"
+    x:Class="AmazingGeoRace.Views.SolutionDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:AmazingGeoRace"
@@ -11,6 +11,6 @@
     SecondaryButtonText="cancel">
 
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <TextBox x:Name="tb_Solution" Header="Solution"/>
+        <TextBox x:Name="TbSolution" Header="Solution"/>
     </StackPanel>
 </ContentDialog>

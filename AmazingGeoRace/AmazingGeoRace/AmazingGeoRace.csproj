@@ -91,23 +91,28 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Converters\BooleanToCollapsedConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Data\AsyncServiceCommunicationSample.cs" />
+    <Compile Include="Data\WebService.cs" />
     <Compile Include="Domain\LoginService.cs" />
     <Compile Include="Domain\ServiceProxy.cs" />
-    <Compile Include="LoginPage.xaml.cs">
+    <Compile Include="Models\Checkpoint.cs" />
+    <Compile Include="Models\CheckpointRequest.cs" />
+    <Compile Include="Models\Request.cs" />
+    <Compile Include="Models\Route.cs" />
+    <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ServiceModel.cs" />
+    <Compile Include="Models\RouteRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RaceDetailsPage.xaml.cs">
+    <Compile Include="Views\RaceDetailsPage.xaml.cs">
       <DependentUpon>RaceDetailsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SolutionDialog.xaml.cs">
+    <Compile Include="Views\SolutionDialog.xaml.cs">
       <DependentUpon>SolutionDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\MessageBoxWrapper.cs" />
     <Compile Include="ViewModels\RaceDetailsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -132,26 +137,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="LoginPage.xaml">
+    <Page Include="Views\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="RaceDetailsPage.xaml">
+    <Page Include="Views\RaceDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SolutionDialog.xaml">
+    <Page Include="Views\SolutionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

@@ -1,32 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using AmazingGeoRace.Common;
 using AmazingGeoRace.Domain;
-using AmazingRaceService.Interface;
+using AmazingGeoRace.Models;
 
 namespace AmazingGeoRace.ViewModels
 {
     public class MainViewModel
     {
+        private ServiceProxy ServiceProxy { get; }
+        private LoginService LoginService { get; }
         public ICommand ShowRouteDetailsCommand { get; set; }
         public ICommand ResetAllRoutesCommand { get; set; }
         public ObservableCollection<Route> Routes { get; } = new ObservableCollection<Route>();
 
-        public MainViewModel() {
-            ShowRouteDetailsCommand = new RelayCommand(OnShowRouteDetailsCommand);
-            ResetAllRoutesCommand = new RelayCommand(obj => OnResetAllRoutesCommand());
+        public MainViewModel(ServiceProxy serviceProxy, LoginService loginService) {
+            ServiceProxy = serviceProxy;
+            LoginService = loginService;
+            ShowRouteDetailsCommand = new RelayCommand(async obj => await OnShowRouteDetailsCommand(obj));
+            ResetAllRoutesCommand = new RelayCommand(async obj => await OnResetAllRoutesCommand());
         }
 
 
-        public void Initialize()
-        {
-            ReloadRoutes();
+        public async void Initialize() {
+            await ExceptionHandling.HandleExceptionForAsyncMethod(async () => SetRoutes(await ServiceProxy.GetRoutes(LoginService.Credentials)));
         }
 
         public void SetRoutes(IEnumerable<Route> routes) {
@@ -36,22 +39,22 @@ namespace AmazingGeoRace.ViewModels
             }
         }
 
-        private async void OnShowRouteDetailsCommand(object obj)
-        {
+        private async Task OnShowRouteDetailsCommand(object obj) {
             await ExceptionHandling.HandleException(() => {
                 var route = obj as Route;
                 if (route == null)
                     throw new Exception("No route selected.");
-                ShowRouteDetails(route);
+                ((Frame)Window.Current.Content).Navigate(typeof(Views.RaceDetailsPage), route);
             });
         }
 
-        private async void OnResetAllRoutesCommand() {
-            await ExceptionHandling.HandleException(() => { ResetAllRoutes(); });
+        private async Task OnResetAllRoutesCommand() {
+            await ExceptionHandling.HandleException(async () => {
+                await ExceptionHandling.HandleExceptionForAsyncMethod(async () => {
+                    await ServiceProxy.ResetAllRoutes(new Request(LoginService.Credentials));
+                    await MessageBoxWrapper.ShowOkAsync("Routes successfully resetted.");
+                });
+            });
         }
-
-        public event Action ReloadRoutes;
-        public event Action ResetAllRoutes;
-        public event Action<Route> ShowRouteDetails;
     }
 }

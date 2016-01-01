@@ -1,6 +1,5 @@
 ﻿using AmazingGeoRace.Domain;
 using AmazingGeoRace.ViewModels;
-using AmazingRaceService.Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -109,7 +108,7 @@ namespace AmazingGeoRace
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(LoginPage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(Views.LoginPage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -150,93 +149,9 @@ namespace AmazingGeoRace
         {
             var loginService = new LoginService();
             var serviceProxy = new ServiceProxy();
-            LoginViewModel = new LoginViewModel();
-            LoginViewModel.PerformLogin += async (username, password) => {
-                await ExceptionHandling.HandleExceptionForAsyncMethod(async () => {
-                    await loginService.Login(username, password);
-                    ((Frame)Window.Current.Content).Navigate(typeof(MainPage));
-                });
-            };
-
-            MainViewModel = new MainViewModel();
-            MainViewModel.ReloadRoutes += async () => {
-                await ExceptionHandling.HandleExceptionForAsyncMethod(async () =>  MainViewModel.SetRoutes(await serviceProxy.GetRoutes(loginService.Credentials.Username, loginService.Credentials.Password)));
-            };
-            
-            MainViewModel.ResetAllRoutes += async () => {
-                await ExceptionHandling.HandleExceptionForAsyncMethod(async () => {
-                    await serviceProxy.ResetAllRoutes(new Request {
-                        Password = loginService.Credentials.Password,
-                        UserName = loginService.Credentials.Username
-                    });
-                    var dialog = new MessageDialog("Routes successfully resetted.");
-                    await dialog.ShowAsync();
-                });
-            };
-            MainViewModel.ShowRouteDetails += (route) => {
-                ((Frame)Window.Current.Content).Navigate(typeof(RaceDetailsPage), route);
-            };
-            
-
-            RaceDetailsViewModel = new RaceDetailsViewModel();
-            RaceDetailsViewModel.ShowSuccessMessage += async succeededRoute =>
-            {
-                var dialog = new MessageDialog($"You finished {succeededRoute.Name} successfully! Congratulations.");
-                await dialog.ShowAsync();
-            };
-            RaceDetailsViewModel.ShowUnlockCheckpointDialog += async checkPoint =>
-            {
-                var dialog = new SolutionDialog();
-                await dialog.ShowAsync();
-                await Dialog_TrySolution(dialog.Solution);
-            };
-            RaceDetailsViewModel.ResetRoute += async route => {
-                var result = await serviceProxy.ResetRoute(new RouteRequest {
-                    UserName = "s1310307019",
-                    Password = "s1310307019",
-                    RouteId = route.Id
-                });
-                if (result) {
-                    var routes = await serviceProxy.GetRoutes("s1310307019", "s1310307019");
-                    RaceDetailsViewModel.Route = routes.FirstOrDefault(x => x.Id == route.Id);
-                }
-                else {
-                    var dialog = new MessageDialog($"An error occurred when trying to reset route {route.Name}.");
-                    await dialog.ShowAsync();
-                }
-
-            };
-        }
-
-        private async Task Dialog_TrySolution(string solution)
-        {
-            await CheckSolutionForCheckPoint(solution, RaceDetailsViewModel.NextCheckPoint, async () =>
-            {
-                var serviceProxy = new ServiceProxy();
-                var routes = await serviceProxy.GetRoutes("s1310307019", "s1310307019");
-                RaceDetailsViewModel.Route = routes.FirstOrDefault(x => x.Id == RaceDetailsViewModel.Route.Id);
-            }, async () =>
-            {
-                var dialog = new MessageDialog($"{solution} wasn´t the correct solution. Please try anotherone.");
-                await dialog.ShowAsync();
-            });
-
-        }
-
-        private async Task CheckSolutionForCheckPoint(string solution, Checkpoint checkPoint, Action onCorrect, Action onIncorrect)
-        {
-            var serviceProxy = new ServiceProxy();
-            var result = await serviceProxy.InformAboutVisitedCheckpoint(new CheckpointRequest
-            {
-                CheckpointId = checkPoint.Id,
-                UserName = "s1310307019",
-                Password = "s1310307019",
-                Secret = solution
-            });
-            if (result)
-                onCorrect();
-            else
-                onIncorrect();
-        }
+            LoginViewModel = new LoginViewModel(loginService);
+            MainViewModel = new MainViewModel(serviceProxy, loginService);
+            RaceDetailsViewModel = new RaceDetailsViewModel(serviceProxy, loginService);
+        }     
     }
 }

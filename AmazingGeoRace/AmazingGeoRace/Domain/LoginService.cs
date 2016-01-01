@@ -8,8 +8,8 @@ namespace AmazingGeoRace.Domain
 {
     public class Credentials
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Username { get; }
+        public string Password { get; }
 
         public Credentials(string username, string password) {
             Username = username;
@@ -27,7 +27,7 @@ namespace AmazingGeoRace.Domain
             return;
 #endif
             var serviceProxy = new ServiceProxy();
-            if (await serviceProxy.CheckCredentials(username, password)) 
+            if (await serviceProxy.CheckCredentials(Credentials)) 
                 Credentials = new Credentials(username, password);
             else 
                 throw new Exception($"Login with username {username} failed.");

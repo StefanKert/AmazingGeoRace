@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AmazingGeoRace.Data;
-using AmazingRaceService.Interface;
+using AmazingGeoRace.Models;
 
 namespace AmazingGeoRace.Domain
 {
     public class ServiceProxy
     {
-        public async Task<bool> CheckCredentials(string username, string password) {
-            return await WebService.QueryDataFromService<bool>($"/CheckCredentials?userName={username}&password={password}");
+        public async Task<bool> CheckCredentials(Credentials credentials) {
+            return await WebService.QueryDataFromService<bool>($"/CheckCredentials?userName={credentials.Username}&password={credentials.Password}");
         }
 
-        public async Task<IEnumerable<Route>> GetRoutes(string username, string password)
+        public async Task<IEnumerable<Route>> GetRoutes(Credentials credentials)
         {
-            return await WebService.QueryDataFromService<IEnumerable<Route>>($"/GetRoutes?userName={username}&password={password}");
+            return await WebService.QueryDataFromService<IEnumerable<Route>>($"/GetRoutes?userName={credentials.Username}&password={credentials.Password}");
         }
 
         public async Task<bool> InformAboutVisitedCheckpoint(CheckpointRequest checkpoint)
