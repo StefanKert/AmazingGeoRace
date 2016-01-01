@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using AmazingGeoRace.Commands;
 using AmazingGeoRace.Common;
 using AmazingGeoRace.Domain;
 

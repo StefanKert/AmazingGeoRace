@@ -21,6 +21,10 @@ namespace AmazingGeoRace.Domain
     {
         public Credentials Credentials { get; set; }
 
+        public bool IsAuthenticated() {
+            return Credentials != null;
+        }
+
         public async Task Login(string username, string password) {
 #if DEBUG
             Credentials = new Credentials("s1310307019", "s1310307019");

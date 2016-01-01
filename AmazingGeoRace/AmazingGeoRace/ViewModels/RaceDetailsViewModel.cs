@@ -10,6 +10,7 @@ using Windows.UI;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
+using AmazingGeoRace.Commands;
 using AmazingGeoRace.Domain;
 using AmazingGeoRace.Models;
 

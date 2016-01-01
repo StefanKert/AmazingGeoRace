@@ -55,7 +55,7 @@
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" Content="Reset Route" Command="{Binding ResetRouteCommand}" HorizontalAlignment="Stretch"/>
                 </Grid>
-                <Maps:MapControl  x:Name="Map" Grid.Row="1" ZoomLevel="18" Maps:Style="AerialWithRoads" MapServiceToken=" AoYHlDdX43W94h_H3MubTFFMGVMLuI_l8nL-udsJnPfikaRKj3ffBSE8z6wP-_FE"/>
+                <Maps:MapControl  x:Name="Map" Grid.Row="1" ZoomLevel="10" Style="AerialWithRoads" MapServiceToken="AoYHlDdX43W94h_H3MubTFFMGVMLuI_l8nL-udsJnPfikaRKj3ffBSE8z6wP-_FE"/>
             </Grid>
         </Grid>
     </Grid>
