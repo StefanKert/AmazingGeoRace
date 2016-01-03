@@ -4,7 +4,7 @@
     xmlns:local="using:AmazingGeoRace"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     xmlns:converters="using:AmazingGeoRace.Converters"
     x:Class="AmazingGeoRace.Views.RaceDetailsPage"
     mc:Ignorable="d"
@@ -55,7 +55,7 @@
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" Content="Reset Route" Command="{Binding ResetRouteCommand}" HorizontalAlignment="Stretch"/>
                 </Grid>
-                <Maps:MapControl  x:Name="Map" Grid.Row="1" ZoomLevel="10" Style="AerialWithRoads" MapServiceToken="AoYHlDdX43W94h_H3MubTFFMGVMLuI_l8nL-udsJnPfikaRKj3ffBSE8z6wP-_FE"/>
+                <maps:MapControl  x:Name="Map" Grid.Row="1" ZoomLevel="18" Style="AerialWithRoads" MapServiceToken="AoYHlDdX43W94h_H3MubTFFMGVMLuI_l8nL-udsJnPfikaRKj3ffBSE8z6wP-_FE"/>
             </Grid>
         </Grid>
     </Grid>

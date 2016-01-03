@@ -38,8 +38,10 @@ namespace AmazingGeoRace.ViewModels
                     await MessageBoxWrapper.ShowOkAsync("No password given for user.");
                 }
                 else {
-                    await LoginService.Login(Username, password);
-                    ((Frame)Window.Current.Content).Navigate(typeof(Views.MainPage));
+                    password = password.Trim();
+                    await LoginService.Login(Username, password, () => {
+                        ((Frame)Window.Current.Content).Navigate(typeof(Views.MainPage));
+                    });
                 }
             });
         }

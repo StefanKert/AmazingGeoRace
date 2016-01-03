@@ -28,13 +28,7 @@ namespace AmazingGeoRace.ViewModels
         {
 
             get { return _finished; }
-            set
-            {
-                if (Equals(value, _finished))
-                    return;
-                _finished = value;
-                OnPropertyChanged();
-            }
+            set { OnPropertyChanged(ref _finished, value); }
         }
 
         private Route _route;
@@ -44,8 +38,21 @@ namespace AmazingGeoRace.ViewModels
             private set { OnPropertyChanged(ref _route, value); }
         }
 
-        public void SetRoute(Route route) {
+        public Checkpoint NextCheckPoint => Route.NextCheckpoint;
+
+        public MapControl Map { get; set; }
+
+        public RaceDetailsViewModel(ServiceProxy serviceProxy, LoginService loginService) {
+            ServiceProxy = serviceProxy;
+            LoginService = loginService;
+            ShowUnlockCheckpointDialogCommand = new RelayCommand(obj => ShowUnlockCheckpointDialog());
+            ResetRouteCommand = new RelayCommand(obj => ResetRoute(Route));
+        }
+
+        public void SetRoute(Route route)
+        {
             Route = route;
+            RefreshMap(GetMapElementsForCurrentRoute(), Route);
             if (Route.NextCheckpoint != null)
             {
                 OnPropertyChanged(nameof(NextCheckPoint));
@@ -57,15 +64,6 @@ namespace AmazingGeoRace.ViewModels
             }
         }
 
-        public RaceDetailsViewModel(ServiceProxy serviceProxy, LoginService loginService) {
-            ServiceProxy = serviceProxy;
-            LoginService = loginService;
-            ShowUnlockCheckpointDialogCommand = new RelayCommand(obj => ShowUnlockCheckpointDialog(), () => !Finished);
-            ResetRouteCommand = new RelayCommand(obj => ResetRoute(Route), () => Finished);
-        }
-
-        public Checkpoint NextCheckPoint => Route.NextCheckpoint;
-
         public List<MapElement> GetMapElementsForCurrentRoute() {
             var elements = new List<MapElement>();
             var checkPoints = Route.VisitedCheckpoints.ToList();
@@ -76,6 +74,14 @@ namespace AmazingGeoRace.ViewModels
             elements.AddRange(Route.VisitedCheckpoints.Select(GetMapIconForCheckPoint));
             elements.Add(GetLinesForCheckPoints(checkPoints));
             return elements;
+        }
+
+        public void RefreshMap(IEnumerable<MapElement> elements, Route route) {
+            Map.MapElements.Clear();
+            foreach (var element in elements) {
+                Map.MapElements.Add(element);
+            }
+            Map.Center = route.NextCheckpoint?.Location ?? route.VisitedCheckpoints.Last()?.Location;
         }
 
         private MapPolyline GetLinesForCheckPoints(IEnumerable<Checkpoint> checkPoints)
@@ -103,22 +109,24 @@ namespace AmazingGeoRace.ViewModels
             };
         }
 
-        public async void ResetRoute(Route route) {
+        private async void ResetRoute(Route route) {
             var result = await ServiceProxy.ResetRoute(new RouteRequest(LoginService.Credentials, route.Id));
             if (result) {
                 var routes = await ServiceProxy.GetRoutes(LoginService.Credentials);
-                Route = routes.FirstOrDefault(x => x.Id == route.Id);
+                SetRoute(routes.FirstOrDefault(x => x.Id == route.Id));
+                await MessageBoxWrapper.ShowOkAsync($"Resetting route {route.Name} successful.");
+                Finished = false;
             }
             else {
                 await MessageBoxWrapper.ShowOkAsync($"An error occurred when trying to reset route {route.Name}.");
             }
         }
 
-        public async void ShowSuccessMessage(Route route) {
+        private async void ShowSuccessMessage(Route route) {
             await MessageBoxWrapper.ShowOkAsync($"You finished {route.Name} successfully! Congratulations.");
         }
 
-        public async void ShowUnlockCheckpointDialog() {
+        private async void ShowUnlockCheckpointDialog() {
             var dialog = new Views.SolutionDialog();
             var contentResult = await dialog.ShowAsync();
             if (contentResult == ContentDialogResult.Primary) {
@@ -126,7 +134,7 @@ namespace AmazingGeoRace.ViewModels
                 if (result) {
                     await MessageBoxWrapper.ShowOkAsync($"Congratulations. Correct answer!");
                     var routes = await ServiceProxy.GetRoutes(LoginService.Credentials);
-                    Route = routes.FirstOrDefault(x => x.Id == Route.Id);
+                    SetRoute(routes.FirstOrDefault(x => x.Id == Route.Id));
                 }
                 else {
                     await MessageBoxWrapper.ShowOkAsync($"{dialog.Solution} wasn´t the correct solution. Please try anotherone.");

@@ -1,5 +1,8 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Windows.ApplicationModel;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using AmazingGeoRace.Models;
+using AmazingGeoRace.ViewModels;
 
 namespace AmazingGeoRace.Views
 {
@@ -9,6 +12,10 @@ namespace AmazingGeoRace.Views
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
+
+            RoutesList.Items.Add(new Route {
+                Name = "Test"
+            });
         }
 
         /// <summary>

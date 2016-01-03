@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace AmazingGeoRace.Domain
 {
@@ -25,15 +27,13 @@ namespace AmazingGeoRace.Domain
             return Credentials != null;
         }
 
-        public async Task Login(string username, string password) {
-#if DEBUG
-            Credentials = new Credentials("s1310307019", "s1310307019");
-            return;
-#endif
+        public async Task Login(string username, string password, Action onSucceeded) {
             var serviceProxy = new ServiceProxy();
-            if (await serviceProxy.CheckCredentials(Credentials)) 
+            if (await serviceProxy.CheckCredentials(new Credentials(username, password))) {
                 Credentials = new Credentials(username, password);
-            else 
+                onSucceeded();
+            }
+            else
                 throw new Exception($"Login with username {username} failed.");
         }
     }

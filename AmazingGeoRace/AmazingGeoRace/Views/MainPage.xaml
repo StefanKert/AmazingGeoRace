@@ -32,9 +32,16 @@
             <ListView ItemsSource="{Binding Routes}" x:Name="RoutesList" SelectionChanged="ListView_SelectionChanged">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" FontSize="20"></TextBlock>
-                        </StackPanel>
+                        <Grid Margin="10" HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Width="48" Source="../Assets/route.png"/>
+                            <Border Grid.Column="1"  HorizontalAlignment="Stretch" BorderBrush="White" BorderThickness="1">
+                                <TextBlock Text="{Binding Name}" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

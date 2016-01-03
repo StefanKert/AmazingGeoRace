@@ -1,22 +1,22 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Windows.Phone.UI.Input;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Navigation;
 using AmazingGeoRace.Models;
 
 namespace AmazingGeoRace.Views
 {
-    public sealed partial class RaceDetailsPage : Page
+    public sealed partial class RaceDetailsPage: Page
     {
 
-        public RaceDetailsPage()
-        {
+        public RaceDetailsPage() {
             this.InitializeComponent();
             HardwareButtons.BackPressed += HardwareButtons_BackPressed;
         }
 
-        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
-        {
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e) {
             if (!Frame.CanGoBack)
                 return;
             e.Handled = true;
@@ -24,8 +24,7 @@ namespace AmazingGeoRace.Views
         }
 
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
+        protected override void OnNavigatedFrom(NavigationEventArgs e) {
             HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
         }
 
@@ -37,12 +36,8 @@ namespace AmazingGeoRace.Views
             }
 
             var viewModel = App.Current.RaceDetailsViewModel;
+            viewModel.Map = Map;
             viewModel.SetRoute(route);
-            var elements = viewModel.GetMapElementsForCurrentRoute();
-            foreach (var element in elements) {
-                Map.MapElements.Add(element);
-            }
-            Map.Center = route.NextCheckpoint?.Location ?? route.VisitedCheckpoints.Last()?.Location;
             DataContext = viewModel;
         }
     }

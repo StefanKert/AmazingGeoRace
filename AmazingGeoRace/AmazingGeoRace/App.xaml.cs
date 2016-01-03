@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using AmazingGeoRace.Common;
+using AmazingGeoRace.Views;
 
 namespace AmazingGeoRace
 {
@@ -50,7 +51,7 @@ namespace AmazingGeoRace
                 DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-
+            var startPageType = typeof(LoginPage);
             Frame rootFrame = Window.Current.Content as Frame;
 
             if (rootFrame == null) {
@@ -60,18 +61,19 @@ namespace AmazingGeoRace
                 };
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated) {
-                    try
-                    {
+                    try {
                         await SuspensionManager.RestoreAsync();
-                        if ((bool) SuspensionManager.SessionState["Authenticated"]) {
+                        if ((bool)SuspensionManager.SessionState["Authenticated"]) {
                             var username = SuspensionManager.SessionState["Username"] as string;
                             var password = SuspensionManager.SessionState["Password"] as string;
-                            await _loginService.Login(username, password);
+                            await _loginService.Login(username, password, async () => {
+                                startPageType = typeof(MainPage);
+                                await MessageBoxWrapper.ShowOkAsync($"You have been logged in automatically. With username {username}.");
+                            });
                         }
                         await SuspensionManager.RestoreAsync("frameSessionKey");
                     }
-                    catch (Exception)
-                    {
+                    catch (Exception) {
                         Debug.WriteLine("Session restore failed.");
                     }
                 }
@@ -89,15 +91,14 @@ namespace AmazingGeoRace
                 rootFrame.ContentTransitions = null;
                 rootFrame.Navigated += RootFrame_FirstNavigated;
 
-                if (!rootFrame.Navigate(typeof(Views.LoginPage), e.Arguments)) {
+                if (!rootFrame.Navigate(startPageType, e.Arguments)) {
                     throw new Exception("Failed to create initial page");
                 }
             }
             Window.Current.Activate();
         }
 
-        private async void OnSuspending(object sender, SuspendingEventArgs e)
-        {
+        private async void OnSuspending(object sender, SuspendingEventArgs e) {
             var deferral = e.SuspendingOperation.GetDeferral();
 
             try {
@@ -108,11 +109,10 @@ namespace AmazingGeoRace
                 }
                 await SuspensionManager.SaveAsync();
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 Debug.WriteLine("Saving session failed.");
             }
             deferral.Complete();
-        }   
+        }
     }
 }
