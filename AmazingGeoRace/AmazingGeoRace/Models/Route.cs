@@ -13,5 +13,7 @@ namespace AmazingGeoRace.Models
         public Checkpoint[] VisitedCheckpoints { get; set; }
         [DataMember]
         public Checkpoint NextCheckpoint { get; set; }
+
+        public bool Finished => NextCheckpoint == null;
     }
 }

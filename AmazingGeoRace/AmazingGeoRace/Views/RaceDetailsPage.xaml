@@ -26,7 +26,7 @@
 
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock Text="Amazing Geo Race" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="{Binding Route.Name, FallbackValue=Current Route}" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Route.Name, FallbackValue=Current Route}" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin ="10">

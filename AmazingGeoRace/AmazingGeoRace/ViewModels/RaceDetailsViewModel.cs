@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Windows.Input;
 using Windows.Devices.Geolocation;
@@ -8,7 +7,6 @@ using AmazingGeoRace.Common;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI;
 using Windows.Storage.Streams;
-using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using AmazingGeoRace.Commands;
 using AmazingGeoRace.Domain;
@@ -55,7 +53,7 @@ namespace AmazingGeoRace.ViewModels
             RefreshMap(GetMapElementsForCurrentRoute(), Route);
             if (Route.NextCheckpoint != null)
             {
-                OnPropertyChanged(nameof(NextCheckPoint));
+                OnPropertyChanged("NextCheckPoint");
                 Finished = false;
             }
             else {
@@ -114,16 +112,16 @@ namespace AmazingGeoRace.ViewModels
             if (result) {
                 var routes = await ServiceProxy.GetRoutes(LoginService.Credentials);
                 SetRoute(routes.FirstOrDefault(x => x.Id == route.Id));
-                await MessageBoxWrapper.ShowOkAsync($"Resetting route {route.Name} successful.");
+                await MessageBoxWrapper.ShowOkAsync("Resetting route " + route.Name + " successful.");
                 Finished = false;
             }
             else {
-                await MessageBoxWrapper.ShowOkAsync($"An error occurred when trying to reset route {route.Name}.");
+                await MessageBoxWrapper.ShowOkAsync("An error occurred when trying to reset route " + route.Name +".");
             }
         }
 
         private async void ShowSuccessMessage(Route route) {
-            await MessageBoxWrapper.ShowOkAsync($"You finished {route.Name} successfully! Congratulations.");
+            await MessageBoxWrapper.ShowOkAsync("You finished " + route.Name + " successfully! Congratulations.");
         }
 
         private async void ShowUnlockCheckpointDialog() {
@@ -132,12 +130,12 @@ namespace AmazingGeoRace.ViewModels
             if (contentResult == ContentDialogResult.Primary) {
                 var result = await ServiceProxy.InformAboutVisitedCheckpoint(new CheckpointRequest(LoginService.Credentials, NextCheckPoint.Id, dialog.Solution));
                 if (result) {
-                    await MessageBoxWrapper.ShowOkAsync($"Congratulations. Correct answer!");
+                    await MessageBoxWrapper.ShowOkAsync("Congratulations. Correct answer!");
                     var routes = await ServiceProxy.GetRoutes(LoginService.Credentials);
                     SetRoute(routes.FirstOrDefault(x => x.Id == Route.Id));
                 }
                 else {
-                    await MessageBoxWrapper.ShowOkAsync($"{dialog.Solution} wasn´t the correct solution. Please try anotherone.");
+                    await MessageBoxWrapper.ShowOkAsync(dialog.Solution + " was not the correct solution. Please try anotherone.");
                 }
             }
         }

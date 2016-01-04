@@ -27,14 +27,20 @@ namespace AmazingGeoRace.Domain
             return Credentials != null;
         }
 
-        public async Task Login(string username, string password, Action onSucceeded) {
+        public async Task Login(string username, string password, Action onSucceeded, Action<Exception> onFailed) {
             var serviceProxy = new ServiceProxy();
             if (await serviceProxy.CheckCredentials(new Credentials(username, password))) {
                 Credentials = new Credentials(username, password);
                 onSucceeded();
             }
             else
-                throw new Exception($"Login with username {username} failed.");
+                onFailed(new Exception($"Login with username {username} failed."));
+        }
+
+        public void Logout()
+        {
+            Credentials = null;
+            Application.Current.Exit();
         }
     }
 }

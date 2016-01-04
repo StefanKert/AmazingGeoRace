@@ -19,6 +19,7 @@ namespace AmazingGeoRace.ViewModels
         private LoginService LoginService { get; }
         public ICommand ShowRouteDetailsCommand { get; set; }
         public ICommand ResetAllRoutesCommand { get; set; }
+        public ICommand LogoutCommand { get; set; }
         public ObservableCollection<Route> Routes { get; } = new ObservableCollection<Route>();
 
         public MainViewModel(ServiceProxy serviceProxy, LoginService loginService) {
@@ -26,6 +27,7 @@ namespace AmazingGeoRace.ViewModels
             LoginService = loginService;
             ShowRouteDetailsCommand = new RelayCommand(async obj => await OnShowRouteDetailsCommand(obj));
             ResetAllRoutesCommand = new RelayCommand(async obj => await OnResetAllRoutesCommand());
+            LogoutCommand = new RelayCommand(obj => LoginService.Logout());
         }
 
 
@@ -54,6 +56,7 @@ namespace AmazingGeoRace.ViewModels
                 await ExceptionHandling.HandleExceptionForAsyncMethod(async () => {
                     await ServiceProxy.ResetAllRoutes(new Request(LoginService.Credentials));
                     await MessageBoxWrapper.ShowOkAsync("Routes successfully resetted.");
+                    SetRoutes(await ServiceProxy.GetRoutes(LoginService.Credentials));
                 });
             });
         }

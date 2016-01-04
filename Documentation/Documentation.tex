@@ -5,6 +5,7 @@
 \usepackage{cmbright}
 \usepackage[T1]{fontenc}
 \usepackage{babel}
+\DeclareUnicodeCharacter{FEFF}{}
 
 \usepackage{paralist}	
 \usepackage{geometry}	
@@ -53,16 +54,14 @@
 \author{Stefan Kert}
 \date{\today}
 \maketitle
-
 \section{Allgemeines}
-Die Plattform, welche für die Projektarbeit ausgewählt wurde, ist Windows Phone 8.1. Es gibt bei der Version 8.1 der Plattform zahlreiche Vorteile, wie zum Beispiel eine bessere Unterstützung des .Net Frameworks und im Allgemeinen ist es zukunftsorientierter gestaltet, daher wurde dieses für die Entwicklung gewählt. Als IDE wurde Visual Studio 2015 in der Enterprise Version verwendet und getestet wurde die App auf einem Emulator mit WP 8.1 und einem Emulator mit WP 10. 
+Die Plattform, welche für die Projektarbeit ausgewählt wurde, ist Windows Phone 8.1. Es gibt bei der Version 8.1 der Plattform zahlreiche Vorteile, wie zum Beispiel eine bessere Unterstützung des .Net Frameworks und im Allgemeinen ist es zukunftsorientierter gestaltet. Als IDE wurde Visual Studio 2015 in der Enterprise Version verwendet und getestet wurde die App auf einem Emulator mit WP 8.1 und einem Emulator mit WP 10. 
 
 \section{Lösungsidee}
 Bei der Lösung wird auf eine möglichst gute Trennung der einzelnen Aspkete geachtet. Es wird dabei das in der .NET Programmierungsumgebung etablierte MVVM Pattern angewandt verwendet. Durch dieses wird eine gute Trennung zwischen View und Logik gewährleistet. Weiters wird eine eigene Klasse für die Interaktion mit dem Webservice implementiert. 
 
 
 \subsection{Anwendungsstruktur}
-\label{cha:Anwendungsstruktur}
 Grundsätzlich besteht die \textit{AmazingRace}-App aus 3 Pages:
 \begin{itemize}
 	\item \textbf{LoginPage}: Hier erfolgt der Login. Falls die Zugangsdaten nicht erfolgreich sind, wird dem User eine entsprechende Fehlermeldung angezeigt.
@@ -77,12 +76,6 @@ Beim Abschluss einer Route (bzw. wenn der User zu einer Route navigiert, die ber
 \subsubsection{Architektur}
 Die Anwendung setzt das für Windows-Anwendungen und -Apps typische MVVM-Muster um; das bedeutet, dass es zu jeder der drei in Abschnitt~\ref{cha:Anwendungsstruktur} beschriebenen Views ein entsprechendes ViewModel gibt. Dieses kennt die Views nicht, sondern bietet Datenkomponenten und Commands an, an die sich die View binden kann. Die Oberfläche bleibt dadurch austauschbar, ohne die Business Logic verändern zu müssen -- diese könnte ohne großen Aufwand z.B. auch für eine Windows-Desktopanwendung verwendet werden (Abb.~\ref{fig:arch}). 
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=.95\textwidth]{architecture}
-\caption{Implementierung des MVVM-Patterns.}
-\label{fig:arch}
-\end{figure}
 
 \subsubsection{Webservice-Anbindung}
 Um die Applikation Daten mit dem Webservice austauschen zu lassen, wurde ein einfacher Service-Proxy entwickelt, der über einen \textit{HttpClient} GET- und POST-Requests ausführen und die Rückgabedaten direkt auf die entsprechenden Objekte mappen kann (für das Mapping wurde die von Microsoft empfohlene Bibliothek JSON.NET verwendet). Die Klasse \textit{ServiceProxy}, die das Interface \textit{IServiceProxy} implementiert, stellt dazu komfortable Methoden zur Verfügung. 
@@ -96,128 +89,133 @@ Es muss also bei jedem Übergang in den \textit{Suspended}-Zustand angenommen we
 
 
 \newpage
-\section{Use Cases}
-\subsection{Login mit falschem Benutzernamen/Kennwort}
-Bei Eingabe eines falschen Benutzernamens oder Kennworts erfolgt kein Login und der Benutzer wird benachrichtigt.
+\section{Testfälle und Screenshots}
+
+\subsection{Login Fenster}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.95\textwidth]{screenshots/login-error}
-\caption{Login-Bildschirm vor und nach fehlgeschlagenem Login.}
-\label{fig:GraphDb}
+\includegraphics[width=.95\textwidth]{images/loginPage}
+\caption{Grundfenster Login}
 \end{figure}
-
-\newpage
-\subsection{Login mit richtigem Benutzernamen und Kennwort}
-Bei Eingabe eines korrekten Benutzernamens und dazu passenden Kennworts erfolgt der Login und der Benutzer wird auf die Routenübersicht weitergeleitet.
-
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.95\textwidth]{screenshots/login-success}
-\caption{Erfolgreicher Login-Ablauf.}
-\label{fig:GraphDb}
+\includegraphics[width=.95\textwidth]{images/loginPage_Failed}
+\caption{Feher beim Login}
 \end{figure}
 
-\newpage
-\subsection{Auswahl einer Route und erfolgreiches Freischalten eines Checkpoints}
-Der Benutzer kann auf der Routen-Übersichts-Seite eine Route auswählen und wird dann auf die Detail-Seite weitergeleitet. Auf dieser kann er über den entsprechenden Button den nächsten Checkpoint freischalten -- nach einem Klick auf diesen wird dazu ein Dialog gezeigt. Bei richtiger Eingabe wird die Detail-Seite aktualisiert.
-
+\subsection{Routenübersicht}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.95\textwidth]{screenshots/route-successfull}
-\caption{Erfolgreicher Login-Ablauf.}
-\label{fig:GraphDb}
+\includegraphics[width=.95\textwidth]{images/routePage}
+\caption{Übersicht Routen}
 \end{figure}
-
-\subsection{Auswahl einer Route und nicht erfolgreiches Freischalten eines Checkpoints}
-Der Benutzer kann auf der Routen-Übersichts-Seite eine Route auswählen und wird dann auf die Detail-Seite weitergeleitet. Auf dieser kann er über den entsprechenden Button den nächsten Checkpoint freischalten -- nach einem Klick auf diesen wird dazu ein Dialog gezeigt. Bei falscher Eingabe wird die Detail-Seite nicht aktualisiert.
-
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=.95\textwidth]{screenshots/route-failure}
-\caption{Erfolgreicher Login-Ablauf.}
-\label{fig:GraphDb}
+\includegraphics[width=.95\textwidth]{images/routePage_SucceededRoute}
+\caption{Eine Route erfolgreich abgeschlossen}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=.95\textwidth]{images/routePage_ResetRoutes}
+\caption{Zurücksetzen aller Routen}
 \end{figure}
 
+\subsection{Details einer Route}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.95\textwidth]{images/routeDetailsPage}
+\caption{Details der gewählten Route mit Karte}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.95\textwidth]{images/routeDetailsPage_Final}
+\caption{Gelöste Route mit Karte}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=.95\textwidth]{images/routeDetailsPage_Resetting}
+\caption{Zurücksetzen einer Route}
+\end{figure}
+
+\subsection{Lösungen für Freischaltung}
+\begin{figure}[h]
+\centering
+\includegraphics[width=.95\textwidth]{images/routeSolutionPage}
+\caption{Ansicht des Lösungsdialogs}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=.95\textwidth]{images/routeSolutionPage_Failed}
+\caption{Falsche Lösung angegeben}
+\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=.95\textwidth]{images/routeSolutionPage_Success}
+\caption{Lösung richtig}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.95\textwidth]{images/routeSolutionPage_Finished}
+	\caption{Route erfolgreich abgeschlossen}
+\end{figure}
 
 \newpage
 \section{Quellcode}
 
-\subsection{Views}
-\lstinputlisting
-[caption=LoginPage.xaml]
-{../AmazingRace/AmazingRace/Views/LoginPage.xaml}
+\subsection{Commands}
+\lstinputlisting[caption=RelayCommand.cs]{../AmazingGeoRace/AmazingGeoRace/Commands/RelayCommand.cs}
 
-\lstinputlisting
-[caption=LoginPage.xaml.cs]
-{../AmazingRace/AmazingRace/Views/LoginPage.xaml.cs}
-
-\lstinputlisting
-[caption=RouteDetailsPage.xaml]
-{../AmazingRace/AmazingRace/Views/RouteDetailsPage.xaml}
-
-\lstinputlisting
-[caption=RouteDetailsPage.xaml.cs]
-{../AmazingRace/AmazingRace/Views/RouteDetailsPage.xaml.cs}
-
-\lstinputlisting
-[caption=RoutesPage.xaml]
-{../AmazingRace/AmazingRace/Views/RoutesPage.xaml}
-
-\lstinputlisting
-[caption=RoutesPage.xaml.cs]
-{../AmazingRace/AmazingRace/Views/RoutesPage.xaml.cs}
-
-\lstinputlisting
-[caption=UnlockCheckpointDialog.xaml]
-{../AmazingRace/AmazingRace/Views/UnlockCheckpointDialog.xaml}
-
-\lstinputlisting
-[caption=UnlockCheckpointDialog.xaml.cs]
-{../AmazingRace/AmazingRace/Views/UnlockCheckpointDialog.xaml.cs}
-
-
-\subsection{ViewModels}
-\lstinputlisting
-[caption=ViewModelBase.cs]
-{../AmazingRace/AmazingRace/ViewModels/ViewModelBase.cs}
-
-\lstinputlisting
-[caption=LoginViewModel.cs]
-{../AmazingRace/AmazingRace/ViewModels/LoginViewModel.cs}
-
-\lstinputlisting
-[caption=RouteDetailsViewModel.cs]
-{../AmazingRace/AmazingRace/ViewModels/RouteDetailsViewModel.cs}
-
-\lstinputlisting
-[caption=RoutesViewModel.cs]
-{../AmazingRace/AmazingRace/ViewModels/RoutesViewModel.cs}
-
-
-\subsection{Services}
-\lstinputlisting
-[caption=IServiceProxy.cs]
-{../AmazingRace/AmazingRace/Services/IServiceProxy.cs}
-
-\lstinputlisting
-[caption=ServiceProxy.cs]
-{../AmazingRace/AmazingRace/Services/ServiceProxy.cs}
-
-\lstinputlisting
-[caption=LoginService.cs]
-{../AmazingRace/AmazingRace/Services/LoginService.cs}
-
-\lstinputlisting
-[caption=ServiceProxyFactory.cs]
-{../AmazingRace/AmazingRace/Services/ServiceProxyFactory.cs}
-
+\subsection{Common}
+\lstinputlisting[caption=ExceptionHandling.cs]{../AmazingGeoRace/AmazingGeoRace/Common/ExceptionHandling.cs}
+\lstinputlisting[caption=MessageBoxWrapper.cs]{../AmazingGeoRace/AmazingGeoRace/Common/MessageBoxWrapper.cs}
+\lstinputlisting[caption=NavigationHelper.cs]{../AmazingGeoRace/AmazingGeoRace/Common/NavigationHelper.cs}
+\lstinputlisting[caption=ObservableDictionary.cs]{../AmazingGeoRace/AmazingGeoRace/Common/ObservableDictionary.cs}
+\lstinputlisting[caption=SuspensionManager.cs]{../AmazingGeoRace/AmazingGeoRace/Common/SuspensionManager.cs}
 
 \subsection{Converters}
-\lstinputlisting
-[caption=BooleanToVisiblityConverter.cs]
-{../AmazingRace/AmazingRace/Converters/BooleanToVisiblityConverter.cs}
+\lstinputlisting[caption=BooleanToCollapsedConverter.cs]{../AmazingGeoRace/AmazingGeoRace/Converters/BooleanToCollapsedConverter.cs}
+\lstinputlisting[caption=BooleanToVisibilityConverter.cs]{../AmazingGeoRace/AmazingGeoRace/Converters/BooleanToVisibilityConverter.cs}
+
+\subsection{Data}
+\lstinputlisting[caption=WebService.cs]{../AmazingGeoRace/AmazingGeoRace/Data/WebService.cs}
+
+\subsection{Domain}
+\lstinputlisting[caption=LoginService.cs]{../AmazingGeoRace/AmazingGeoRace/Domain/LoginService.cs}
+\lstinputlisting[caption=ServiceProxy.cs]{../AmazingGeoRace/AmazingGeoRace/Domain/ServiceProxy.cs}
+
+\subsection{Models}
+\lstinputlisting[caption=Checkpoint.cs]{../AmazingGeoRace/AmazingGeoRace/Models/Checkpoint.cs}
+\lstinputlisting[caption=CheckpointRequest.cs]{../AmazingGeoRace/AmazingGeoRace/Models/CheckpointRequest.cs}
+\lstinputlisting[caption=Request.cs]{../AmazingGeoRace/AmazingGeoRace/Models/Request.cs}
+\lstinputlisting[caption=Route.cs]{../AmazingGeoRace/AmazingGeoRace/Models/Route.cs}
+\lstinputlisting[caption=RouteRequest.cs]{../AmazingGeoRace/AmazingGeoRace/Models/RouteRequest.cs}
+
+\subsection{ViewModels}
+\lstinputlisting[caption=LoginViewModel.cs]{../AmazingGeoRace/AmazingGeoRace/ViewModels/LoginViewModel.cs}
+\lstinputlisting[caption=MainViewModel.cs]{../AmazingGeoRace/AmazingGeoRace/ViewModels/MainViewModel.cs}
+\lstinputlisting[caption=RaceDetailsViewModel.cs]{../AmazingGeoRace/AmazingGeoRace/ViewModels/RaceDetailsViewModel.cs}
+\lstinputlisting[caption=ViewModelBase.cs]{../AmazingGeoRace/AmazingGeoRace/ViewModels/ViewModelBase.cs}
+
+\subsection{Views-Markup}
+\lstinputlisting[caption=LoginPage.xaml]{../AmazingGeoRace/AmazingGeoRace/Views/LoginPage.xaml}
+\lstinputlisting[caption=MainPage.xaml]{../AmazingGeoRace/AmazingGeoRace/Views/MainPage.xaml}
+\lstinputlisting[caption=RaceDetailsPage.xaml]{../AmazingGeoRace/AmazingGeoRace/Views/RaceDetailsPage.xaml}
+\lstinputlisting[caption=SolutionDialog.xaml]{../AmazingGeoRace/AmazingGeoRace/Views/SolutionDialog.xaml}
+
+\subsection{Views}
+\lstinputlisting[caption=LoginPage.xaml.cs]{../AmazingGeoRace/AmazingGeoRace/Views/LoginPage.xaml.cs}
+\lstinputlisting[caption=MainPage.xaml.cs]{../AmazingGeoRace/AmazingGeoRace/Views/MainPage.xaml.cs}
+\lstinputlisting[caption=RaceDetailsPage.xaml.cs]{../AmazingGeoRace/AmazingGeoRace/Views/RaceDetailsPage.xaml.cs}
+\lstinputlisting[caption=SolutionDialog.xaml.cs]{../AmazingGeoRace/AmazingGeoRace/Views/SolutionDialog.xaml.cs}
+
+\subsection{App}
+\lstinputlisting[caption=App.xaml]{../AmazingGeoRace/AmazingGeoRace/App.xaml}
+\lstinputlisting[caption=App.xaml.cs]{../AmazingGeoRace/AmazingGeoRace/App.xaml.cs}
+
 \end{document}

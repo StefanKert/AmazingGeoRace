@@ -9,7 +9,6 @@
     Title="Solution"
     PrimaryButtonText="OK"  
     SecondaryButtonText="cancel">
-
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <TextBox x:Name="TbSolution" Header="Solution"/>
     </StackPanel>

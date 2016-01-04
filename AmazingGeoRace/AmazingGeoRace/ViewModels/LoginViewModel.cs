@@ -41,6 +41,8 @@ namespace AmazingGeoRace.ViewModels
                     password = password.Trim();
                     await LoginService.Login(Username, password, () => {
                         ((Frame)Window.Current.Content).Navigate(typeof(Views.MainPage));
+                    }, async exception => {
+                        await MessageBoxWrapper.ShowOkAsync(exception.Message);
                     });
                 }
             });

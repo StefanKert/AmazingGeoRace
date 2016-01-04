@@ -68,7 +68,9 @@ namespace AmazingGeoRace
                             var password = SuspensionManager.SessionState["Password"] as string;
                             await _loginService.Login(username, password, async () => {
                                 startPageType = typeof(MainPage);
-                                await MessageBoxWrapper.ShowOkAsync($"You have been logged in automatically. With username {username}.");
+                                await MessageBoxWrapper.ShowOkAsync(string.Format("You have been logged in automatically. With username {0}.", username));
+                            }, async (exception) => {
+                                await MessageBoxWrapper.ShowOkAsync(exception.Message);
                             });
                         }
                         await SuspensionManager.RestoreAsync("frameSessionKey");
