@@ -13,7 +13,7 @@ using AmazingGeoRace.Models;
 
 namespace AmazingGeoRace.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : ViewModelBase
     {
         private ServiceProxy ServiceProxy { get; }
         private LoginService LoginService { get; }

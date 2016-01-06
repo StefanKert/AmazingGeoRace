@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Diagnostics;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using AmazingGeoRace.Common;
 
@@ -15,7 +17,8 @@ namespace AmazingGeoRace.Views
 
 
         protected override void OnNavigatedTo(NavigationEventArgs e) {
-            DataContext = App.Current.LoginViewModel;
+            var viewmodel = App.Current.LoginViewModel;
+            DataContext = viewmodel;
         }
     }
 }

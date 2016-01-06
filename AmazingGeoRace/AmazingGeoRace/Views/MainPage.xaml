@@ -7,9 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:AmazingGeoRace.Converters"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Light">
     <Page.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
     <Grid x:Name="LayoutRoot">
 
@@ -41,14 +41,14 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="10" HorizontalAlignment="Stretch">
+                        <Border Padding="5" Margin="10" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch">
+                            <Grid HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Image Grid.Column="0" Width="48" Source="../Assets/route.png"/>
-                            <Border Grid.Column="1" BorderBrush="White" BorderThickness="1" HorizontalAlignment="Stretch">
-                                <Grid VerticalAlignment="Center">
+                                <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*"/>
                                         <ColumnDefinition Width="Auto"/>
@@ -57,8 +57,8 @@
                                     <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="20" />
                                     <Image Grid.Column="2" Visibility="{Binding Finished, Converter={StaticResource BoolToVis}, FallbackValue=Hidden}" HorizontalAlignment="Right" Width="35" Source="../Assets/check.png" Margin="0,0,10,0"/>
                                 </Grid>
-                            </Border>
-                        </Grid>
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

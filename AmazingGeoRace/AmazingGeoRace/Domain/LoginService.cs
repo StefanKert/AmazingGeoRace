@@ -5,20 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using AmazingGeoRace.Models;
 
 namespace AmazingGeoRace.Domain
 {
-    public class Credentials
-    {
-        public string Username { get; }
-        public string Password { get; }
-
-        public Credentials(string username, string password) {
-            Username = username;
-            Password = password;
-        }
-    }
-
     public class LoginService
     {
         public Credentials Credentials { get; set; }

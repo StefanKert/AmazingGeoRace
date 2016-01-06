@@ -8,7 +8,7 @@
     xmlns:converters="using:AmazingGeoRace.Converters"
     x:Class="AmazingGeoRace.Views.RaceDetailsPage"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Light">
     <Page.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <converters:BooleanToCollapsedConverter x:Key="BoolToHidden"/>
