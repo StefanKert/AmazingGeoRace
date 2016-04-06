@@ -60,9 +60,9 @@ Die Plattform, welche für die Projektarbeit ausgewählt wurde, ist Windows Phon
 \subsection{Tombstoning in WP 8.1}
 Bei der Architektur von WP 8.1 hat sich Microsoft für einen ähnlichen Weg für das Lifecycle Management entschieden wie beim WP 8. Einer der größten Unterschiede ist die Tatsache, dass Apps nicht mehr direkt beendet oder deaktiviert werden, sondern in den sogenannten \textit{Suspended}-Status versetzt werden. Bei Speicherknappheit, kann es vorkommen, dass die App denoch komplett beendet wird. Dies geschieht wie auch beim WP 8 ohne Vorwarnung und daher sollte sichergestellt werden, dass bei jedem Übergang in den \textit{Suspended}-Status alle benötigten Daten gespeichert werden. Für diese Zwecke können in WP 8.1 die in der Klasse Application vorhandenen Methoden \textit{OnLaunched} überschrieben, bzw. \textit{OnSupsended} auf das \textit{Suspended} Event gebunden werden. Dort wird ähnlich wie beim WP 8 auf ein \textit{SessionState}-Dictionary zugegriffen, welches schließlich im System persistiert wird. Sobald das \textit{OnLaunched} Event aufgerufen wird, können die Daten aus diesem Dictionary erneut geladen werden. Weiters gibt es die Möglichkeit zum Speichern der aktuell geöffneten Frame, sodass diese beim erneuten Öffnen wieder geöffnet wird. 
 
+\newpage
 \section{Lösungsidee}
 Bei der Lösung wird auf eine möglichst gute Trennung der einzelnen Aspkete geachtet. Es wird dabei das in der .NET Programmierungsumgebung etablierte MVVM Pattern  verwendet. Durch dieses wird eine gute Trennung zwischen View und Logik gewährleistet. Weiters wird eine eigene Klasse für die Interaktion mit dem Webservice implementiert. 
-
 
 \subsection{Anwendungsarchitektur}
 Grundsätzlich besteht die AmazingGeoRace-App aus 3 Seiten und mehreren Dialogen:
